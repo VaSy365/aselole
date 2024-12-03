@@ -1,0 +1,382 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Violet Library</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        .font-great-vibes {
+            font-family: 'Great Vibes', cursive;
+        }
+    </style>
+</head>
+<body class="font-roboto bg-gray-100">
+    <div id="app" class="min-h-screen flex flex-col bg-purple-200">
+        <!-- Navigation -->
+        <nav class="bg-violet-600 p-4 text-white">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-4xl font-great-vibes">Violet Library</h1>
+                <div>
+                    <button id="adminBtn" class="bg-violet-800 px-4 py-2 rounded">Admin</button>
+                    <button id="memberBtn" class="bg-violet-800 px-4 py-2 rounded">Member</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Admin Login -->
+        <div id="adminLogin" class="container mx-auto p-4 hidden">
+            <h2 class="text-2xl font-bold mb-4">Admin Login</h2>
+            <form id="adminLoginForm" class="bg-white p-4 rounded shadow">
+                <div class="mb-4">
+                    <label for="adminName" class="block text-gray-700">Name</label>
+                    <input type="text" id="adminName" class="w-full p-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="adminPassword" class="block text-gray-700">Password</label>
+                    <input type="password" id="adminPassword" class="w-full p-2 border rounded" required>
+                </div>
+                <button type="submit" class="bg-violet-600 text-white px-4 py-2 rounded">Login</button>
+            </form>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" class="container mx-auto p-4 hidden">
+            <h2 class="text-2xl font-bold mb-4">Admin Dashboard</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-xl font-bold mb-2">Data Member</h3>
+                    <ul id="memberList">
+                        <!-- Member data will be appended here -->
+                    </ul>
+                </div>
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-xl font-bold mb-2">Data Buku</h3>
+                    <ul id="bookList">
+                        <!-- Book data will be appended here -->
+                    </ul>
+                    <form id="addBookForm" class="mt-4">
+                        <div class="mb-4">
+                            <label for="bookTitle" class="block text-gray-700">Judul Buku</label>
+                            <input type="text" id="bookTitle" class="w-full p-2 border rounded" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="bookAuthor" class="block text-gray-700">Pengarang/Penerbit</label>
+                            <input type="text" id="bookAuthor" class="w-full p-2 border rounded" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="bookLink" class="block text-gray-700">Link PDF</label>
+                            <input type="url" id="bookLink" class="w-full p-2 border rounded" required>
+                        </div>
+                        <button type="submit" class="bg-violet-600 text-white px-4 py-2 rounded">Add Book</button>
+                    </form>
+                </div>
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-xl font-bold mb-2">Data Peminjaman</h3>
+                    <ul id="borrowList">
+                        <!-- Borrow data will be appended here -->
+                    </ul>
+                </div>
+                <div class="bg-white p-4 rounded shadow">
+                    <h3 class="text-xl font-bold mb-2">Data Pengembalian</h3>
+                    <ul id="returnList">
+                        <!-- Return data will be appended here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Member Login -->
+        <div id="memberLogin" class="container mx-auto p-4 hidden">
+            <h2 class="text-2xl font-bold mb-4">Member Login</h2>
+            <form id="loginForm" class="bg-white p-4 rounded shadow">
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-700">Name</label>
+                    <input type="text" id="name" class="w-full p-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-700">Password</label>
+                    <input type="password" id="password" class="w-full p-2 border rounded" required>
+                </div>
+                <button type="submit" class="bg-violet-600 text-white px-4 py-2 rounded">Login</button>
+            </form>
+        </div>
+
+        <!-- Member Dashboard -->
+        <div id="memberDashboard" class="container mx-auto p-4 hidden">
+            <h2 class="text-2xl font-bold mb-4">Member Dashboard</h2>
+            <div class="bg-white p-4 rounded shadow">
+                <h3 class="text-xl font-bold mb-2">Data Buku</h3>
+                <ul id="memberBookList">
+                    <!-- Book data will be appended here -->
+                </ul>
+                <button id="proceedToBorrowReturn" class="bg-violet-600 text-white px-4 py-2 rounded mt-4">Proceed to Borrow/Return</button>
+            </div>
+        </div>
+
+        <!-- Borrow/Return Book -->
+        <div id="borrowReturnSection" class="container mx-auto p-4 hidden">
+            <h2 class="text-2xl font-bold mb-4">Pinjam/Kembalikan Buku</h2>
+            <div class="bg-white p-4 rounded shadow">
+                <form id="borrowReturnForm">
+                    <div class="mb-4">
+                        <label for="bookName" class="block text-gray-700">Nama</label>
+                        <input type="text" id="bookName" class="w-full p-2 border rounded" readonly>
+                    </div>
+                    <div class="mb-4">
+                        <label for="bookTitle" class="block text-gray-700">Judul Buku</label>
+                        <input type="text" id="bookTitle" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="author" class="block text-gray-700">Pengarang/Penerbit</label>
+                        <input type="text" id="author" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="year" class="block text-gray-700">Tahun Terbit</label>
+                        <input type="number" id="year" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="date" class="block text-gray-700">Tanggal</label>
+                        <input type="date" id="date" class="w-full p-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">Action</label>
+                        <div class="flex items-center">
+                            <input type="radio" id="borrow" name="action" value="Pinjam" class="mr-2" required>
+                            <label for="borrow" class="mr-4">Pinjam</label>
+                            <input type="radio" id="return" name="action" value="Kembalikan" class="mr-2" required>
+                            <label for="return">Kembalikan</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="bg-violet-600 text-white px-4 py-2 rounded">Submit</button>
+                </form>
+                <div id="bookLinkContainer" class="mt-4 hidden">
+                    <a id="bookLink" href="#" target="_blank" class="text-blue-600 underline"></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Book Access Page -->
+        <div id="bookAccessPage" class="container mx-auto p-4 hidden">
+            <h2 class="text-2xl font-bold mb-4">Access Your Book</h2>
+            <div class="bg-white p-4 rounded shadow">
+                <h3 class="text-xl font-bold mb-2" id="selectedBookTitle"></h3>
+                <a id="selectedBookLink" href="#" target="_blank" class="text-blue-600 underline">Read Book</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const adminBtn = document.getElementById('adminBtn');
+        const memberBtn = document.getElementById('memberBtn');
+        const adminLogin = document.getElementById('adminLogin');
+        const adminDashboard = document.getElementById('adminDashboard');
+        const memberLogin = document.getElementById('memberLogin');
+        const memberDashboard = document.getElementById('memberDashboard');
+        const borrowReturnSection = document.getElementById('borrowReturnSection');
+        const bookAccessPage = document.getElementById('bookAccessPage');
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const loginForm = document.getElementById('loginForm');
+        const borrowReturnForm = document.getElementById('borrowReturnForm');
+        const addBookForm = document.getElementById('addBookForm');
+        const memberList = document.getElementById('memberList');
+        const bookList = document.getElementById('bookList');
+        const memberBookList = document.getElementById('memberBookList');
+        const borrowList = document.getElementById('borrowList');
+        const returnList = document.getElementById('returnList');
+        const bookLinkContainer = document.getElementById('bookLinkContainer');
+        const bookLink = document.getElementById('bookLink');
+        const proceedToBorrowReturn = document.getElementById('proceedToBorrowReturn');
+        const selectedBookTitle = document.getElementById('selectedBookTitle');
+        const selectedBookLink = document.getElementById('selectedBookLink');
+        let currentMemberName = '';
+
+        // Load data from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData('bookList', bookList);
+            loadData('returnList', returnList);
+        });
+
+        function loadData(key, element) {
+            const data = JSON.parse(localStorage.getItem(key)) || [];
+            data.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = item;
+                element.appendChild(listItem);
+            });
+        }
+
+        function saveData(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        adminBtn.addEventListener('click', () => {
+            adminLogin.classList.remove('hidden');
+            adminDashboard.classList.add('hidden');
+            memberLogin.classList.add('hidden');
+            memberDashboard.classList.add('hidden');
+            borrowReturnSection.classList.add('hidden');
+            bookAccessPage.classList.add('hidden');
+        });
+
+        memberBtn.addEventListener('click', () => {
+            adminLogin.classList.add('hidden');
+            adminDashboard.classList.add('hidden');
+            memberLogin.classList.remove('hidden');
+            memberDashboard.classList.add('hidden');
+            borrowReturnSection.classList.add('hidden');
+            bookAccessPage.classList.add('hidden');
+        });
+
+        adminLoginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const adminName = document.getElementById('adminName').value;
+            const adminPassword = document.getElementById('adminPassword').value;
+
+            if (adminName === 'VioletCompany' && adminPassword === 'VioletWisdom24') {
+                adminLogin.classList.add('hidden');
+                adminDashboard.classList.remove('hidden');
+            } else {
+                alert('Invalid admin credentials');
+            }
+        });
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const password = document.getElementById('password').value;
+
+            // Retrieve members from localStorage
+            const members = JSON.parse(localStorage.getItem('members')) || {};
+
+            if (members[name] && members[name] !== password) {
+                alert('Invalid member credentials');
+                return;
+            }
+
+            // Save member credentials if not already saved
+            if (!members[name]) {
+                members[name] = password;
+                localStorage.setItem('members', JSON.stringify(members));
+            }
+
+            const currentDateTime = new Date();
+            const date = currentDateTime.toLocaleDateString();
+            const time = currentDateTime.toLocaleTimeString();
+
+            const listItem = document.createElement('li');
+            listItem.textContent = `${name} - ${date} - ${time}`;
+            memberList.appendChild(listItem);
+
+            // Save to localStorage
+            const memberData = JSON.parse(localStorage.getItem('memberList')) || [];
+            memberData.push(`${name} - ${date} - ${time}`);
+            saveData('memberList', memberData);
+
+            currentMemberName = name;
+
+            memberLogin.classList.add('hidden');
+            memberDashboard.classList.remove('hidden');
+
+            // Load book data for member
+            loadData('bookList', memberBookList);
+        });
+
+        proceedToBorrowReturn.addEventListener('click', () => {
+            document.getElementById('bookName').value = currentMemberName;
+            memberDashboard.classList.add('hidden');
+            borrowReturnSection.classList.remove('hidden');
+        });
+
+        borrowReturnForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('bookName').value;
+            const title = document.getElementById('bookTitle').value;
+            const author = document.getElementById('author').value;
+            const year = document.getElementById('year').value;
+            const date = document.getElementById('date').value;
+            const action = document.querySelector('input[name="action"]:checked').value;
+
+            const currentTime = new Date().toLocaleTimeString();
+
+            const listItem = document.createElement('li');
+            listItem.textContent = `${name} - ${title} - ${author} - ${year} - ${date} - ${currentTime} - ${action}`;
+
+            if (action === 'Pinjam') {
+                borrowList.appendChild(listItem);
+
+                // Save to localStorage
+                const borrows = JSON.parse(localStorage.getItem('borrowList')) || [];
+                borrows.push(listItem.textContent);
+                saveData('borrowList', borrows);
+
+                // Show the book data to the member
+                const book = Array.from(bookList.children).find(item => {
+                    const bookTitle = item.querySelector('a').textContent.split(' - ')[0];
+                    const bookAuthor = item.querySelector('a').textContent.split(' - ')[1];
+                    return bookTitle.includes(title) && bookAuthor.includes(author);
+                });
+
+                if (book) {
+                    selectedBookTitle.textContent = book.querySelector('a').textContent;
+                    selectedBookLink.href = book.querySelector('a').href;
+                    bookAccessPage.classList.remove('hidden');
+                    borrowReturnSection.classList.add('hidden');
+                } else {
+                    alert('Book not found in the library.');
+                }
+
+                // Show a confirmation message to the member
+                alert('Your request has been submitted successfully!');
+            } else {
+                returnList.appendChild(listItem);
+
+                // Save to localStorage
+                const returns = JSON.parse(localStorage.getItem('returnList')) || [];
+                returns.push(listItem.textContent);
+                saveData('returnList', returns);
+
+                // Show a confirmation message to the member
+                alert('Your return has been submitted successfully!');
+
+                // Redirect to member dashboard
+                borrowReturnSection.classList.add('hidden');
+                memberDashboard.classList.remove('hidden');
+            }
+        });
+
+        addBookForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('bookTitle').value;
+            const author = document.getElementById('bookAuthor').value;
+            const link = document.getElementById('bookLink').value;
+
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `<a href="${link}" target="_blank" class="text-blue-600 underline">${title} - ${author}</a> <button class="text-red-600 ml-2" onclick="removeBook(this)">Remove</button>`;
+            bookList.appendChild(listItem);
+
+            // Save to localStorage
+            const books = JSON.parse(localStorage.getItem('bookList')) || [];
+            books.push(listItem.innerHTML);
+            saveData('bookList', books);
+        });
+
+        function removeBook(button) {
+            const listItem = button.parentElement;
+            const bookListItems = Array.from(bookList.children);
+
+            const bookIndex = bookListItems.indexOf(listItem);
+
+            if (bookIndex > -1) {
+                bookList.removeChild(listItem);
+
+                // Update localStorage
+                const books = JSON.parse(localStorage.getItem('bookList')) || [];
+                books.splice(bookIndex, 1);
+                saveData('bookList', books);
+            }
+        }
+    </script>
+</body>
+</html>
